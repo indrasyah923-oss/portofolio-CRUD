@@ -1,6 +1,6 @@
 // src/pages/SettingPage.jsx
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, Plus, Edit2, Trash2, Home, Save, X,
   Users, ChevronRight, Type, Image, AlignLeft,
@@ -688,6 +688,12 @@ const UsersPanel = ({ users, token, currentUserId, onRefresh, showToast }) => {
 // ── Main Setting Page ─────────────────────────────────────────────────────────
 const SettingPage = () => {
   const { user, token, isAdmin, isMaster, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
   const [activeMenu, setActiveMenu]       = useState('blog');
   const [blogs, setBlogs]                 = useState([]);
   const [users, setUsers]                 = useState([]);
@@ -758,13 +764,13 @@ const SettingPage = () => {
       </div>
 
       {toast && (
-        <div className="fixed top-6 right-6 z-50 bg-gray-800 border border-gray-700 text-white px-5 py-3 rounded-xl shadow-xl text-sm animate-fadeIn">
+        <div className="fixed top-6 right-6 z-[999] bg-gray-800 border border-gray-700 text-white px-5 py-3 rounded-xl shadow-xl text-sm animate-fadeIn">
           {toast}
         </div>
       )}
 
       <nav className="fixed top-0 w-full bg-gray-900/80 backdrop-blur-md border-b border-gray-800 z-40">
-        <div className="mx-auto px-4 md:px-20 py-4 flex justify-between items-center">
+        <div className="mx-auto px-20 py-5 flex justify-between items-center">
           <Link to="/" className="flex items-center gap-2 text-gray-400 hover:text-purple-400 transition-colors">
             <ArrowLeft size={18} /><span className="text-sm">Kembali</span>
           </Link>
@@ -775,10 +781,10 @@ const SettingPage = () => {
         </div>
       </nav>
 
-      <div className="pt-20 pb-10 px-4 md:px-20 flex flex-col md:flex-row gap-6 max-w-6xl mx-auto">
-        <aside className="w-full md:w-56 flex-shrink-0">
-          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-4 mb-4">
-            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xl font-bold text-white mb-3">
+      <div className="pt-20 pb-10 px-4 md:px-20 flex flex-col md:flex-row gap-6 max-w-8xl mx-auto">
+        <aside className="w-full md:w-56 flex-shrink-0 flex flex-row md:flex-col gap-3 md:gap-0">
+          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl p-4 mb-0 md:mb-4 w-2/5 md:w-auto flex flex-row md:flex-col items-center md:items-start gap-3 md:gap-0">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-base md:text-xl font-bold text-white md:mb-3 flex-shrink-0">
               {user?.username?.[0]?.toUpperCase()}
             </div>
             <p className="text-white font-semibold text-sm">{user?.username}</p>
@@ -786,7 +792,7 @@ const SettingPage = () => {
               {roleLabel[user?.role]}
             </span>
           </div>
-          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden">
+          <div className="bg-gray-900/50 border border-gray-800 rounded-2xl overflow-hidden w-3/5 md:w-auto">
             {menus.map((m, i) => (
               <button key={m.id} onClick={() => setActiveMenu(m.id)}
                 className={`w-full flex items-center justify-between px-5 py-4 transition-all duration-300 ${i > 0 ? 'border-t border-gray-800/50' : ''} ${activeMenu === m.id ? 'bg-purple-600/20 text-purple-400' : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'}`}>
